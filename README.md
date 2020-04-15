@@ -1,7 +1,7 @@
 # Collect Title
 
 <p align="center">
-  <img src="/src/main/resources/static/assets/logo-collect-title.svg">
+  <img src="/src/main/resources/static/assets/logo-collect-title-dark.svg">
 </p>
 
 O objetivo do projeto **Collect Title** é facilitar o gerenciamento/controle de títulos.
