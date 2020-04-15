@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html 
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{DefaultLayout}">
+	
+<head>
+	<title>Pesquisa de títulos</title>
+</head>
+
+<section layout:fragment="content">
+	<div layout:insert="~{GeneralMessage}"></div>
+	
+	<div class="container-fluid border rounded">
+	  <div class="row">
+	    <div class="col py-2 border bg-light form-title">
+	    <span>Pesquisa de títulos</span>
+	    <a th:href="@{titles/new}" class="btn-link-box">
+	    	<button type="button" class="btn btn-primary btn-sm">Novo título</button>
+	    </a>
+	    </div>
+	  </div>
+	  
+	  <div class="container">	
+	  	
+	  	<form th:action="@{/titles}" method="GET" th:object="${filter}">
+			<div class="form-group">
+			
+				<div class="input-group">
+					<input type="text" name="description" class="form-control" placeholder="Qual título você está procurando?"
+						autofocus="autofocus" th:field="*{description}" />
+					<span class="input-group-btn input-group-append">
+						<button type="submit" class="btn btn-default input-group-text">
+							<i class="fas fa-search"></i>
+						</button>
+					</span>
+				</div>
+
+			</div>
+		</form>
+		
+		<div class="table-responsive">
+		  	<table class="table table-bordered table-striped">
+		  		<thead>
+		  			<tr>
+		  				<th scope="col" class="text-center">#</th>
+						<th>Descrição</th>
+		  				<th scope="col" class="text-center">Data de vencimento</th>
+		  				<th scope="col" class="text-left">Valor</th>
+		  				<th scope="col" class="text-center">Status</th>
+		  		  		<th scope="col"></th>
+		  			</tr>
+		  		</thead>
+		  		<tbody class="tbody-content">
+		  			<tr th:each="title : ${titles}">
+		  				<td scope="col" class="text-center rowNumber"></td>
+		  				<td scope="col" th:text="${title.description}"></td>
+		   				<td scope="col" class="text-center" th:text="${{title.expirationDate}}"></td>
+		   				<td scope="col" class="text-left" th:text="|R$ ${{title.value}}|"></td>
+		   				<td scope="col" class="text-center" th:attr="data-role=${title.id}">
+		   					<span class="badge" 
+		   						th:text="${title.status.description}"
+		   						th:classappend="${#strings.toString(title.pending)? 'badge-danger' : 'badge-success'}">
+		   					</span>
+		   				</td>
+		   				<td scope="col" class="text-center">
+		   					<a class="btn btn-link btn-xs" th:href="@{/titles/{id}(id=${title.id})}"
+		   						title="Editar">
+		   						<i class="far fa-edit"></i>
+		   					</a>
+		   					
+		   					<a class="btn btn-link btn-xs" data-toggle="modal" data-target="#confirmDeleteModal" 
+		   						th:attr="data-id=${title.id}, data-description=${title.description}" 
+		   						title="Excluir">
+		   						<i class="far fa-trash-alt"></i>
+		   					</a>
+		   					<a class="btn btn-link btn-xs js-update-status" th:if="${title.pending}" 
+		   						title="Receber" th:href="@{/titles/{id}/receive(id=${title.id})}"
+		   						th:attr="data-id=${title.id}">
+		   						<i class="far fa-calendar-check"></i>
+		   					</a>
+		   				</td>
+		  			</tr>
+		  		
+		  		
+		  			<tr>
+		  				<td scope="row" class="text-center" colspan="6" th:if="${#lists.isEmpty(titles)}">Nenhum título foi encontrado</td> 
+		  			</tr>
+		  		
+		  		</tbody>
+		  	</table>
+		  </div>
+	  </div>
+	  
+	  <div layout:insert="~{ModalConfirmDelete}"></div>
+	  
+	</div>
+</section>		  
+</html>

@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html 
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{DefaultLayout}">
+	
+<head>
+	<title>Cadastro de título</title>
+</head>
+
+<section layout:fragment="content" th:object="${title}">
+	
+	<div layout:insert="~{GeneralMessage}"></div>
+	<div layout:insert="~{ErrorMessage}"></div>
+	
+	<div class="container-fluid border rounded"> 		
+			
+	  <div class="row">
+	    <div class="col py-2 border bg-light form-title">
+	    <span>Novo título</span>
+	    
+	    <a th:href="@{/titles}" class="btn-link-box">
+	    	<button type="button" class="btn btn-link btn-sm">Voltar para pesquisa</button>
+	    </a>
+	    </div>
+	  </div>
+	  
+	  <div class="container">	
+	  	<form class="form-horizontal" method="POST" th:action="@{/titles}">
+		  <input type="hidden" th:field="*{id}">
+		  <div class="form-group">
+		    <label for="description" class="col-sm-2 control-label">Descrição</label>
+		    <div class="col-sm-6">
+		    	<input type="text" class="form-control" id="description" th:field="*{description}" th:classappend="${#fields.hasErrors('description')} ? 'is-invalid'">
+		    </div>
+		  </div>
+		  
+		  <div class="form-group">
+		    <label for="expirationDate" class="col-sm-2 control-label">Data de vencimento</label>
+		    <div class="col-md-2">
+		    	<input type="text" class="form-control" id="expirationDate" th:field="*{expirationDate}" 
+		    	th:classappend="${#fields.hasErrors('expirationDate')} ? 'is-invalid'"
+		    	data-provide="datepicker" data-date-format="dd/mm/yyyy" data-date-language="pt-BR"
+		    	data-date-autoclose="true" data-date-today-highlight="true" data-date-orientation="auto">
+		    </div>
+		  </div>
+		  
+		  <div class="form-group">
+		    <label for="value" class="col-sm-2 control-label">Valor</label>
+		    <div class="input-group col-md-2">
+		        <div class="input-group-prepend">
+		          <div class="input-group-text">R$</div>
+		        </div>
+		    	<input type="text" class="form-control js-currency" id="value" maxlength="11" th:field="*{value}" th:classappend="${#fields.hasErrors('value')} ? 'is-invalid'">
+		    </div>
+		  </div>
+		  
+		  <div class="form-group">
+		    <label for="status" class="col-sm-2 control-label">Status</label>
+		    <div class="col-md-2">
+		    	<select class="form-control" name="status" th:field="*{status}">
+		    		<option th:each="status : ${allTitleStatus}" th:value="${status}" th:text="${status.description}"></option>
+		    	</select>
+		    </div>
+		  </div>
+		  
+		  <div class="col-md-4">
+			  <button type="submit" class="btn btn-primary">Salvar</button>
+		  </div>
+		</form>
+	  </div>
+	  
+	</div>
+</section>
+	
+</html>
